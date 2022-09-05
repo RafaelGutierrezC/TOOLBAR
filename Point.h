@@ -4,13 +4,13 @@
 class Point
 {
 public:
-	Point(double x, double y): x(x), y(y){}
+	Point(double x, double y): x(x), y(y) {}
 
-	double getX(){return x;}
-	double getY(){return y;}
+	double getX() { return x; }
+	double getY() { return y; }
 
-	void setX(double x){this->x=x;}
-	void setY(double y){this->y=y;}
+	void setX(double x) { this->x=x; }
+	void setY(double y) { this->y=y; }
 
 private:
 	double x;
