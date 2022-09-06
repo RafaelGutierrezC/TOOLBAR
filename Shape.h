@@ -16,7 +16,7 @@ public:
 class Rectangulo: public Shape
 {
 public:
-	Rectangulo(Point iniciop, Point finalp, Color colorFrente, Color colorFondo):
+	Rectangulo(Point iniciop, Point finalp, Color *colorFrente, Color *colorFondo):
 		iniciop(iniciop),finalp(finalp),colorFrente(colorFrente),colorFondo(colorFondo) {}
 
 	string pintar() { return "Rectangulo"; }
@@ -24,15 +24,15 @@ public:
 private:
 	Point iniciop;
 	Point finalp;
-	Color colorFrente;
-	Color colorFondo;
+	Color *colorFrente;
+	Color *colorFondo;
 };
 
 
 class Circulo: public Shape
 {
 public:
-	Circulo(Point iniciop, Point finalp, Color colorFrente, Color colorFondo):
+	Circulo(Point iniciop, Point finalp, Color *colorFrente, Color *colorFondo):
 		iniciop(iniciop), finalp(finalp), colorFrente(colorFrente), colorFondo(colorFondo) {}
 
 	string pintar() { return "Circulo"; }
@@ -40,15 +40,15 @@ public:
 private:
 	Point iniciop;
 	Point finalp;
-	Color colorFrente;
-	Color colorFondo;
+	Color *colorFrente;
+	Color *colorFondo;
 };
 
 
 class Cuadrado: public Shape
 {
 public:
-	Cuadrado(Point iniciop, Point finalp, Color colorFrente, Color colorFondo):
+	Cuadrado(Point iniciop, Point finalp, Color *colorFrente, Color *colorFondo):
 		iniciop(iniciop), finalp(finalp), colorFrente(colorFrente), colorFondo(colorFondo) {}
 
 	string pintar() { return "Cuadrado"; }
@@ -56,8 +56,8 @@ public:
 private:
 	Point iniciop;
 	Point finalp;
-	Color colorFrente;
-	Color colorFondo;
+	Color *colorFrente;
+	Color *colorFondo;
 };
 
 

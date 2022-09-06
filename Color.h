@@ -1,23 +1,30 @@
 #ifndef COLOR_H_
 #define COLOR_H_
 
+#include <iostream>
+using namespace std;
+
 class Color
 {
 public:
-	Color(int r, int g, int b): red(r), green(g), blue(b) {}
+	Color(){}
+	virtual string getColor()=0;
 
-	double getRed() { return red; }
-	double getGreen() { return green; }
-	double getBlue() { return blue; }
+};
 
-	void setRed(int value){ red = value; }
-	void setGreen(int value){ green = value; }
-	void setBlue(int value){ blue = value; }
+class Rojo: public Color{
+public:
+	string getColor(){return "Rojo";}
+};
 
-private:
-	int red;
-	int green;
-	int blue;
+class Verde: public Color{
+public:
+	string getColor(){return "Verde";}
+};
+
+class Azul: public Color{
+public:
+	string getColor(){return "Azul";}
 };
 
 #endif /* COLOR_H_ */

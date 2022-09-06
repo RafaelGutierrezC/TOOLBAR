@@ -6,7 +6,8 @@ using namespace std;
 
 int main()
 {
-	Shape *cuadrado1 = new Cuadrado(Point(0,1), Point(3,4), Color(1,2,3),Color(1,2,3));
+	Color *rojo = new Rojo();
+	Shape *cuadrado1 = new Cuadrado(Point(0,1), Point(3,4), rojo, rojo);
 	cout<<cuadrado1->pintar()<<endl;
 	return 0;
 }
