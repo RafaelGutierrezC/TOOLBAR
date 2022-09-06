@@ -6,7 +6,7 @@ void Toolbar::addShapeFactory(string key, ShapeFactory* sFact)
 }
 
 
-ShapeFactory* Toolbar::getFactory(string key)
+ShapeFactory* Toolbar::getShapeFactory(string key)
 {
 	if(shapeFactories.find(key) == shapeFactories.end())
 	{
