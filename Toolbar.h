@@ -3,20 +3,23 @@
 
 #include <map>
 #include "ShapeFactory.h"
-#include "LineCommand.h"
+#include "ColorFactory.h"
 
 class Toolbar
 {
 public:
 	Toolbar() {}
 
-	void addShapeFactory(string key, ShapeFactory* sFact);
+	void addShapeFactory(string key, ShapeFactory* shapeFact);
+
+	void addColorFactory(string key, ColorFactory* colorFact);
 
 private:
 	map<string,ShapeFactory*> shapeFactories;
-	ShapeFactory* getFactory(string key);
+	ShapeFactory* getShapeFactory(string key);
 
-	map<string,LineCommand*> lineCommands;
+	map<string,ColorFactory*> colorFactories;
+	ColorFactory* getColorFactory(string key);
 
 };
 
