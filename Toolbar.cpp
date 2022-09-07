@@ -1,17 +1,17 @@
 #include "Toolbar.h"
 
-void Toolbar::addShapeFactory(string key, ShapeFactory* shapeFact)
+void PaintToolbar::addShapeFactory(string key, ShapeFactory* shapeFact)
 {
 	shapeFactories.insert(make_pair(key,shapeFact));
 }
 
-void Toolbar::addColorFactory(string key, ColorFactory* colorFact)
+void PaintToolbar::addColorFactory(string key, ColorFactory* colorFact)
 {
 	colorFactories.insert(make_pair(key,colorFact));
 }
 
 
-ShapeFactory* Toolbar::getShapeFactory(string key)
+ShapeFactory* PaintToolbar::getShapeFactory(string key)
 {
 	if(shapeFactories.find(key) == shapeFactories.end())
 	{
@@ -21,7 +21,7 @@ ShapeFactory* Toolbar::getShapeFactory(string key)
 	return shapeFactories[key];
 }
 
-ColorFactory* Toolbar::getColorFactory(string key)
+ColorFactory* PaintToolbar::getColorFactory(string key)
 {
 	if(colorFactories.find(key) == colorFactories.end())
 	{
@@ -30,3 +30,16 @@ ColorFactory* Toolbar::getColorFactory(string key)
 
 	return colorFactories[key];
 }
+
+
+Shape* PaintToolbar::getShape(string key, Point *iniciop, Point *finalp, Color *colorFrente, Color *colorFondo)
+{
+	return getShapeFactory(key)->createShape(iniciop,finalp,colorFrente,colorFondo);
+}
+
+
+Color* PaintToolbar::getColor(string key)
+{
+	return getColorFactory(key)->createColor();
+}
+
