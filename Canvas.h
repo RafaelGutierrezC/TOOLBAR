@@ -14,6 +14,9 @@ class Canvas
 public:
 	virtual void create(Shape *shapeType) = 0;
 	//virtual void list(Shape *shapeType, Point *punto) = 0;
+
+
+	// TEST
 	virtual void pintarTodo() = 0;
 };
 
@@ -30,9 +33,11 @@ public:
 
 	//void list(Shape *shapeType, Point *punto);
 
+
+
+	// TEST
 	void pintarTodo()
 	{
-		cout << "HOLA" << endl;
 		for(auto iter = storedShapes.begin(); iter != storedShapes.end(); iter++)
 		{
 			cout << (*iter)->pintar() << endl;

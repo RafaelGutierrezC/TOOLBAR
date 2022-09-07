@@ -21,7 +21,7 @@ public:
 	void compile(string comando)
 	{
 		lineCP = Parser::buildParamsStruct(comando);
-		CompilerMapInitializer::initializeLineCommandMap(canvas, toolbar, lineCommandFactories, lineCP);
+		CompilerMapInitializer::initializeLineCommandMap(canvas, toolbar, &lineCommandFactories, lineCP);
 		lineCommandFactories[lineCP->comando]()->execute();
 	}
 

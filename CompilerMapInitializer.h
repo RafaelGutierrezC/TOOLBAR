@@ -11,10 +11,10 @@ class CompilerMapInitializer
 {
 public:
 	static void initializeLineCommandMap(Canvas *canvas, Toolbar *toolbar,
-			map<string,function<LineCommand*()>>& lineCommandFactories, LineCommandParse *lineCP)
+			map<string,function<LineCommand*()>>* lineCommandFactories, LineCommandParse *lineCP)
 	{
-		lineCommandFactories.insert(make_pair("create",
-				[&]()
+		lineCommandFactories->insert(make_pair("create",
+				[=]()
 				{
 					return buildLineCommand<CreateCommand>(canvas,toolbar,
 							lineCP->shape,lineCP->iniciop,lineCP->finalp,lineCP->colorFrente,lineCP->colorFondo);

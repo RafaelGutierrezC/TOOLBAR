@@ -16,6 +16,7 @@ public:
 
 	virtual Shape* getShape(string key, Point *iniciop, Point *finalp, Color *colorFrente, Color *colorFondo) = 0;
 	virtual Color* getColor(string color) = 0;
+
 };
 
 
