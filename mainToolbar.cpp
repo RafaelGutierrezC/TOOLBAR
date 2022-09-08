@@ -11,8 +11,10 @@ using namespace std;
 
 int main()
 {
-	/*Canvas *canvas = new PaintCanvas();
+	Canvas *canvas = new PaintCanvas();
 	Toolbar *toolbar = new PaintToolbar();
+	CLI::App cliapp{"Paint App"};
+	Parser *parser = new Parser(&cliapp);
 	ShapeFactory *cuadradoFactory = new CuadradoFactory();
 	toolbar->addShapeFactory("cuadrado", cuadradoFactory);
 	ColorFactory *rojoFactory = new RojoFactory();
@@ -20,24 +22,24 @@ int main()
 	ColorFactory *azulFactory = new AzulFactory();
 	toolbar->addColorFactory("azul", azulFactory);
 
-	Compiler comp(canvas,toolbar);
-	comp.compile("create aaa");
-	canvas->pintarTodo();*/
+	Compiler compiler(parser,canvas,toolbar);
+	compiler.compile("create -s cuadrado -i 1.0 2.0 -e 3.0 4.0 -f rojo -b azul");
+	canvas->pintarTodo();
 
-	string comando = "create -s cuadrado -i 1.0 2.0 -e 3.0 4.0 -f rojo -b azul";
+	/*string comando = "create -s cuadrado -i 1.0 2.0 -e 3.0 4.0 -f rojo -b azul";
 	string comando2 = "list -s rectangulo -v verde";
 
 	CLI::App cliapp{"Paint App"};
 
 	LineCommandParse *lineCP = new LineCommandParse();
 
-	/*auto *create = cliapp.add_subcommand("create", "Create a Shape")->immediate_callback();
+	auto *create = cliapp.add_subcommand("create", "Create a Shape")->immediate_callback();
 	create->callback(
 			[&cliapp,lineCP,comando]()
 			{
 				lineCP->commandType = "create";
 			}
-	);*/
+	);
 
 	auto * a = cliapp.add_option("-s", lineCP->shapeType, "Shape type")->required(1);
 	pair<double,double> ip = make_pair(0.0,0.0);
@@ -71,7 +73,7 @@ int main()
 		<< lineCP->iniciop->getX() << " " << lineCP->iniciop->getY() << endl
 		<< lineCP->finalp->getX() << " " << lineCP->finalp->getY() << endl
 		<< lineCP->colorFrente << endl
-		<< lineCP->colorFondo << endl;
+		<< lineCP->colorFondo << endl;*/
 
 	/*lineCP->commandType = "create";
 	lineCP->shapeType = "cuadrado";

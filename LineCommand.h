@@ -52,18 +52,25 @@ private:
 	string colorFon;
 };
 
-/*
+
 class ListCommand: public LineCommand
 {
 public:
-	ListCommand(Canvas *canv,Toolbar *toolb,string shapeType,Point inicioPunto): canvas{canv}, toolbar{toolb}, shape{} {}
-	void execute();
+	ListCommand(Canvas *canv,Toolbar *toolb,string shapeType,Point *inicioPunto): canvas{canv}, toolbar{toolb}, iniciop{inicioPunto}
+	{
+		shapeTyp = shapeType;
+	}
+
+	void execute()
+	{
+
+	}
 
 private:
 	Canvas *canvas;
 	Toolbar *toolbar;
-	string shape;
-	Point iniciop;
-};*/
+	string shapeTyp;
+	Point *iniciop;
+};
 
 #endif /* LINE_COMMAND_H_ */

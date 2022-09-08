@@ -16,6 +16,8 @@ struct LineCommandParse
 	Point *finalp;
 	string colorFrente;
 	string colorFondo;
+	string id;
+	string file;
 };
 
 
@@ -30,11 +32,12 @@ public:
 		string tipoComando;
 		stringstream ss{comando};
 		ss >> tipoComando;
-		cout << comando << endl;
+
 		lineCP->commandType = tipoComando;
+		lineCP->shapeType = "all";
 
 
-		auto *shapeOption = cliapp->add_option("-s", lineCP->shapeType, "Shape type")->required(1);
+		auto *shapeOption = cliapp->add_option("-s", lineCP->shapeType, "Shape type");
 		pair<double,double> ip = make_pair(0.0,0.0);
 		pair<double,double> ep = make_pair(0.0,0.0);
 
@@ -45,6 +48,7 @@ public:
 
 
 
+
 		lineCP->iniciop = new Point(ip.first,ip.second);
 		lineCP->finalp = new Point(ep.first,ep.second);
 
@@ -52,27 +56,35 @@ public:
 		requisiteModifiers.insert(make_pair("create",
 			[=]()
 			{
-				parseCreate(comando,shapeOption,iniciopOption,finalpOption,colorFrenteOption,colorFondoOption);
+				parseCreate(shapeOption,iniciopOption,finalpOption,colorFrenteOption,colorFondoOption);
 			}
 		));
+
+		requisiteModifiers.insert(make_pair("list",
+					[=]()
+					{
+						parseList(shapeOption,iniciopOption);
+					}
+				));
 
 		requisiteModifiers.insert(make_pair("applyForeColor",
 			[=]()
 			{
-
+				parseApplyForeColor(shapeOption,colorFrenteOption);
 			}
 		));
 
 		requisiteModifiers[tipoComando]();
 		cliapp->parse(comando,true);
 
-
+		return lineCP;
 	}
 
 private:
 	CLI::App *cliapp;
 	map<string,function<void()>> requisiteModifiers;
-	void parseCreate(string comando, CLI::Option *shapeOption, CLI::Option *iniciopOption, CLI::Option *finalpOption,
+
+	void parseCreate(CLI::Option *shapeOption, CLI::Option *iniciopOption, CLI::Option *finalpOption,
 			CLI::Option *colorFrenteOption, CLI::Option *colorFondoOption)
 	{
 		shapeOption->required();
@@ -82,9 +94,13 @@ private:
 		colorFondoOption->required(false);
 	}
 
-	void parseList();
+	void parseList(CLI::Option *shapeOption, CLI::Option *iniciopOption)
+	{
+		shapeOption->required(false);
+		iniciopOption->required(false);
+	}
 
-	void applyForeColor(string comando, CLI::Option *shapeOption, CLI::Option *colorFrenteOption)
+	void parseApplyForeColor(CLI::Option *shapeOption, CLI::Option *colorFrenteOption)
 	{
 		shapeOption->required();
 		colorFrenteOption->required();
