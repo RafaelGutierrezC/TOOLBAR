@@ -1,15 +1,17 @@
 #ifndef PARSER_H_
 #define PARSER_H_
 
+#include "CLI11.hpp"
 #include <iostream>
+#include <sstream>
 #include "Point.h"
 using namespace std;
 
 
 struct LineCommandParse
 {
-	string comando;
-	string shape;
+	string commandType;
+	string shapeType;
 	Point *iniciop;
 	Point *finalp;
 	string colorFrente;
@@ -20,18 +22,72 @@ struct LineCommandParse
 class Parser
 {
 public:
-	static LineCommandParse* buildParamsStruct(string comando)
-	{
-		// CREATE MOCKUP
-		LineCommandParse *lineCP = new LineCommandParse();
-		lineCP->comando = "create";
-		lineCP->shape = "cuadrado";
-		lineCP->iniciop = new Point(1.0,2.0);
-		lineCP->finalp = new Point(3.0,4.0);
-		lineCP->colorFrente = "rojo";
-		lineCP->colorFondo = "azul";
+	Parser(CLI::App *capp): cliapp{capp} {}
 
-		return lineCP;
+	LineCommandParse* buildParamsStruct(string comando)
+	{
+		LineCommandParse *lineCP = new LineCommandParse();
+		string tipoComando;
+		stringstream ss{comando};
+		ss >> tipoComando;
+		cout << comando << endl;
+		lineCP->commandType = tipoComando;
+
+
+		auto *shapeOption = cliapp->add_option("-s", lineCP->shapeType, "Shape type")->required(1);
+		pair<double,double> ip = make_pair(0.0,0.0);
+		pair<double,double> ep = make_pair(0.0,0.0);
+
+		auto *iniciopOption = cliapp->add_option("-i", ip, "X Initial Point");
+		auto *finalpOption = cliapp->add_option("-e", ep, "X Final Point");
+		auto *colorFrenteOption = cliapp->add_option("-f", lineCP->colorFrente, "Front Color");
+		auto *colorFondoOption = cliapp->add_option("-b", lineCP->colorFondo, "Back Color");
+
+
+
+		lineCP->iniciop = new Point(ip.first,ip.second);
+		lineCP->finalp = new Point(ep.first,ep.second);
+
+
+		requisiteModifiers.insert(make_pair("create",
+			[=]()
+			{
+				parseCreate(comando,shapeOption,iniciopOption,finalpOption,colorFrenteOption,colorFondoOption);
+			}
+		));
+
+		requisiteModifiers.insert(make_pair("applyForeColor",
+			[=]()
+			{
+
+			}
+		));
+
+		requisiteModifiers[tipoComando]();
+		cliapp->parse(comando,true);
+
+
+	}
+
+private:
+	CLI::App *cliapp;
+	map<string,function<void()>> requisiteModifiers;
+	void parseCreate(string comando, CLI::Option *shapeOption, CLI::Option *iniciopOption, CLI::Option *finalpOption,
+			CLI::Option *colorFrenteOption, CLI::Option *colorFondoOption)
+	{
+		shapeOption->required();
+		iniciopOption->required();
+		finalpOption->required();
+		colorFrenteOption->required(false);
+		colorFondoOption->required(false);
+	}
+
+	void parseList();
+
+	void applyForeColor(string comando, CLI::Option *shapeOption, CLI::Option *colorFrenteOption)
+	{
+		shapeOption->required();
+		colorFrenteOption->required();
 	}
 };
 

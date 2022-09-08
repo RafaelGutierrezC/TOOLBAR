@@ -17,7 +17,7 @@ public:
 				[=]()
 				{
 					return buildLineCommand<CreateCommand>(canvas,toolbar,
-							lineCP->shape,lineCP->iniciop,lineCP->finalp,lineCP->colorFrente,lineCP->colorFondo);
+							lineCP->shapeType,lineCP->iniciop,lineCP->finalp,lineCP->colorFrente,lineCP->colorFondo);
 				}
 		));
 

@@ -1,5 +1,6 @@
 #include "Toolbar.h"
 
+
 void PaintToolbar::addShapeFactory(string key, ShapeFactory* shapeFact)
 {
 	shapeFactories.insert(make_pair(key,shapeFact));

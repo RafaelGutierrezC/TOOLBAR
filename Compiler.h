@@ -10,22 +10,20 @@
 #include "CompilerMapInitializer.h"
 
 
-
-
-
 class Compiler
 {
 public:
-	Compiler(Canvas* canv, Toolbar* toolb): canvas{canv}, toolbar{toolb}, lineCP{nullptr} {}
+	Compiler(Parser* par, Canvas* canv, Toolbar* toolb): parser{par}, canvas{canv}, toolbar{toolb}, lineCP{nullptr} {}
 
 	void compile(string comando)
 	{
-		lineCP = Parser::buildParamsStruct(comando);
+		lineCP = parser->buildParamsStruct(comando);
 		CompilerMapInitializer::initializeLineCommandMap(canvas, toolbar, &lineCommandFactories, lineCP);
-		lineCommandFactories[lineCP->comando]()->execute();
+		lineCommandFactories[lineCP->commandType]()->execute();
 	}
 
 private:
+	Parser *parser;
 	Canvas *canvas;
 	Toolbar *toolbar;
 	LineCommandParse* lineCP;
