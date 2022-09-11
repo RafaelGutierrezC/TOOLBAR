@@ -17,7 +17,6 @@ int main()
 	LineCommandParse *lineCP = new LineCommandParse();
 	Parser *parser = new Parser(&cliapp,lineCP);
 
-
 	Canvas *canvas = new PaintCanvas();
 	Toolbar *toolbar = new PaintToolbar();
 
@@ -28,6 +27,10 @@ int main()
 	ShapeFactory *cuadradoFactory = new CuadradoFactory();
 	toolbar->addShapeFactory("cuadrado", cuadradoFactory);
 
+	ColorFactory *blancoFactory = new BlancoFactory();
+	toolbar->addColorFactory("blanco", blancoFactory);
+	ColorFactory *negroFactory = new NegroFactory();
+	toolbar->addColorFactory("negro", negroFactory);
 	ColorFactory *rojoFactory = new RojoFactory();
 	toolbar->addColorFactory("rojo", rojoFactory);
 	ColorFactory *verdeFactory = new VerdeFactory();
@@ -36,10 +39,10 @@ int main()
 	toolbar->addColorFactory("azul", azulFactory);
 
 	Compiler compiler(parser,canvas,toolbar);
-	compiler.compile("create -s cuadrado -i 1.0 2.0 -e 3.0 4.0 -f rojo -b azul");
-	compiler.compile("create -s cuadrado -i 4.0 2.0 -e 3.0 2.0");
-	compiler.compile("create -s circulo -i 1.0 2.0 -e 3.0 4.0 -f verde -b azul");
-	compiler.compile("list -s cuadrado");
+	compiler.compile("create -s cuadrado -p 1.0 2.0 -e 3.0 4.0 -r rojo -b azul");
+	compiler.compile("create -s cuadrado -p 4.0 2.0 -e 3.0 2.0");
+	compiler.compile("create -s circulo -p 1.0 2.0 -e 6.0 1.0 -b verde");
+	compiler.compile("list");
 	//canvas->pintarTodo();
 
 	/*string comando = "create -s cuadrado -i 1.0 2.0 -e 3.0 4.0 -f rojo -b azul";

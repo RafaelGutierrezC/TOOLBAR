@@ -44,23 +44,23 @@ private:
 		lineCP->shapeType = "NULL";
 		lineCP->iniciop = make_pair(0.0,0.0);
 		lineCP->finalp = make_pair(0.0,0.0);
-		lineCP->colorFrente = "verde";
-		lineCP->colorFondo = "verde";
+		lineCP->colorFrente = "negro";
+		lineCP->colorFondo = "blanco";
 		lineCP->id = 0;
 		lineCP->file = "";
 	}
 
 	void setupCreate(CLI::App *cli, LineCommandParse *lineCP)
 	{
-		auto *createSub = cli->add_subcommand("create","Create a Shape");
+		auto *sub = cli->add_subcommand("create","Create a Shape");
 
-		createSub->add_option("-s", lineCP->shapeType, "Shape type")->required();
-		createSub->add_option("-i", lineCP->iniciop, "X Initial Point")->required();
-		createSub->add_option("-e", lineCP->finalp, "X Final Point")->required();
-		createSub->add_option("-f", lineCP->colorFrente, "Front Color")->required(false);
-		createSub->add_option("-b", lineCP->colorFondo, "Back Color")->required(false);
+		sub->add_option("-s", lineCP->shapeType, "Shape type")->required();
+		sub->add_option("-p", lineCP->iniciop, "Initial Point")->required();
+		sub->add_option("-e", lineCP->finalp, "Final Point")->required();
+		sub->add_option("-r", lineCP->colorFrente, "Front Color")->required(false);
+		sub->add_option("-b", lineCP->colorFondo, "Back Color")->required(false);
 
-		createSub->callback(
+		sub->callback(
 			[lineCP]()
 			{
 				lineCP->commandType = "create";
@@ -71,13 +71,12 @@ private:
 
 	void setupList(CLI::App *cli, LineCommandParse *lineCP)
 	{
-		auto *listSub = cli->add_subcommand("list","Create a Shape");
+		auto *sub = cli->add_subcommand("list","Show list of Shapes");
 
-		lineCP->shapeType = "all";
-		listSub->add_option("-s", lineCP->shapeType, "Shape type")->required(false);
-		listSub->add_option("-i", lineCP->iniciop, "X Initial Point")->required(false);
+		sub->add_option("-s", lineCP->shapeType, "Shape type")->required(false);
+		sub->add_option("-p", lineCP->iniciop, "Initial Point")->required(false);
 
-		listSub->callback(
+		sub->callback(
 			[lineCP]()
 			{
 				lineCP->commandType = "list";
@@ -85,9 +84,56 @@ private:
 		);
 	}
 
-	void setupApplyForeColor()
+	void setupSelect(CLI::App *cli, LineCommandParse *lineCP)
 	{
+		auto *sub = cli->add_subcommand("select","Select a Shape");
 
+		sub->add_option("-i", lineCP->id, "Shape ID")->required();
+
+		sub->callback(
+			[lineCP]()
+			{
+				lineCP->commandType = "select";
+			}
+		);
+	}
+
+	void setupSelectAll(CLI::App *cli, LineCommandParse *lineCP)
+	{
+		auto *sub = cli->add_subcommand("selectAll","Select all Shapes");
+
+		sub->callback(
+			[lineCP]()
+			{
+				lineCP->commandType = "selectAll";
+			}
+		);
+	}
+
+	void setupUnSelect(CLI::App *cli, LineCommandParse *lineCP)
+	{
+		auto *sub = cli->add_subcommand("unselect","Unselect a Shape");
+
+		sub->add_option("-i", lineCP->id, "Shape ID")->required();
+
+		sub->callback(
+			[lineCP]()
+			{
+				lineCP->commandType = "unselect";
+			}
+		);
+	}
+
+	void setupUnSelectAll(CLI::App *cli, LineCommandParse *lineCP)
+	{
+		auto *sub = cli->add_subcommand("unselectAll","Unselect all Shapes");
+
+		sub->callback(
+			[lineCP]()
+			{
+				lineCP->commandType = "unselectAll";
+			}
+		);
 	}
 };
 

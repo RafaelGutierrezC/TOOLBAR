@@ -13,9 +13,13 @@ using namespace std;
 class Canvas
 {
 public:
-	virtual vector<Shape*>* getAllShapes() = 0;
+	virtual vector<pair<Shape*,int>>* getAllShapes() = 0;
 	virtual void create(Shape *shapeType) = 0;
-	virtual void list(vector<Shape*>& selectedShapes) = 0;
+	virtual void list() = 0;
+	virtual void select(int id) = 0;
+	virtual void selectAll() = 0;
+	virtual void unSelect(int id) = 0;
+	virtual void unSelectAll() = 0;
 	virtual ~Canvas() {}
 };
 
@@ -27,33 +31,75 @@ public:
 
 	virtual ~PaintCanvas()
 	{
-		/*for(auto iter = storedShapes.begin(); iter != storedShapes.end(); iter++)
+		/*for(int i = 0; i < storedShapes.size(); i++)
 		{
-			delete (*iter);
+			delete storedShapes[i];
 		}
 		delete storedShapes;*/
 	}
 
-	vector<Shape*>* getAllShapes()
+	vector<pair<Shape*,int>>* getAllShapes()
 	{
 		return &storedShapes;
 	}
 
 	void create(Shape *shapeType)
 	{
-		storedShapes.push_back(shapeType);
+		storedShapes.push_back(make_pair(shapeType,0));
 	}
 
-	void list(vector<Shape*>& selectedShapes)
+	void list()
 	{
-		for(auto iter = selectedShapes.begin(); iter != selectedShapes.end(); iter++)
+		for(auto iter = storedShapes.begin(); iter != storedShapes.end(); iter++)
 		{
-			cout << (*iter)->getType() << endl;
+			if(1 == (*iter).second)
+			{
+				cout << (*iter).first->getShapeDescription() << endl;
+				(*iter).second = 0;
+			}
+		}
+	}
+
+	void select(int id)
+	{
+		for(auto iter = storedShapes.begin(); iter != storedShapes.end(); iter++)
+		{
+			if((*iter).first->getId() == id)
+			{
+				(*iter).second = 1;
+			}
+		}
+	}
+
+	void selectAll()
+	{
+		for(auto iter = storedShapes.begin(); iter != storedShapes.end(); iter++)
+		{
+			(*iter).second = 1;
+		}
+	}
+
+	void unSelect(int id)
+	{
+		for(auto iter = storedShapes.begin(); iter != storedShapes.end(); iter++)
+		{
+			if((*iter).first->getId() == id)
+			{
+				(*iter).second = 0;
+			}
+		}
+	}
+
+	void unSelectAll()
+	{
+		for(auto iter = storedShapes.begin(); iter != storedShapes.end(); iter++)
+		{
+			(*iter).second = 0;
 		}
 	}
 
 private:
-	vector<Shape*> storedShapes;
+	vector<pair<Shape*,int>> storedShapes;
 };
 
 

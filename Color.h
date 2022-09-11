@@ -8,23 +8,43 @@ class Color
 {
 public:
 	Color(){}
-	virtual string getColor()=0;
+	virtual string getColor() = 0;
 
 };
 
-class Rojo: public Color{
+
+class Blanco: public Color
+{
 public:
-	string getColor(){return "Rojo";}
+	string getColor() { return "Blanco"; }
 };
 
-class Verde: public Color{
+
+class Negro: public Color
+{
 public:
-	string getColor(){return "Verde";}
+	string getColor() { return "Negro"; }
 };
 
-class Azul: public Color{
+
+class Rojo: public Color
+{
 public:
-	string getColor(){return "Azul";}
+	string getColor() { return "Rojo"; }
+};
+
+
+class Verde: public Color
+{
+public:
+	string getColor() { return "Verde"; }
+};
+
+
+class Azul: public Color
+{
+public:
+	string getColor() { return "Azul"; }
 };
 
 #endif /* COLOR_H_ */
