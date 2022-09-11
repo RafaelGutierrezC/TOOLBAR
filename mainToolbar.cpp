@@ -5,26 +5,42 @@
 #include "Canvas.h"
 #include "Toolbar.h"
 #include "Compiler.h"
+#include "LineCommandParse.h"
 #include "CLI11.hpp" // TEST
 using namespace std;
 
 
 int main()
 {
+
+	CLI::App cliapp{"Paint App"};
+	LineCommandParse *lineCP = new LineCommandParse();
+	Parser *parser = new Parser(&cliapp,lineCP);
+
+
 	Canvas *canvas = new PaintCanvas();
 	Toolbar *toolbar = new PaintToolbar();
-	CLI::App cliapp{"Paint App"};
-	Parser *parser = new Parser(&cliapp);
+
+	ShapeFactory *rectanguloFactory = new RectanguloFactory();
+	toolbar->addShapeFactory("rectangulo", rectanguloFactory);
+	ShapeFactory *circuloFactory = new CirculoFactory();
+	toolbar->addShapeFactory("circulo", circuloFactory);
 	ShapeFactory *cuadradoFactory = new CuadradoFactory();
 	toolbar->addShapeFactory("cuadrado", cuadradoFactory);
+
 	ColorFactory *rojoFactory = new RojoFactory();
 	toolbar->addColorFactory("rojo", rojoFactory);
+	ColorFactory *verdeFactory = new VerdeFactory();
+	toolbar->addColorFactory("verde", verdeFactory);
 	ColorFactory *azulFactory = new AzulFactory();
 	toolbar->addColorFactory("azul", azulFactory);
 
 	Compiler compiler(parser,canvas,toolbar);
 	compiler.compile("create -s cuadrado -i 1.0 2.0 -e 3.0 4.0 -f rojo -b azul");
-	canvas->pintarTodo();
+	compiler.compile("create -s cuadrado -i 4.0 2.0 -e 3.0 2.0");
+	compiler.compile("create -s circulo -i 1.0 2.0 -e 3.0 4.0 -f verde -b azul");
+	compiler.compile("list -s cuadrado");
+	//canvas->pintarTodo();
 
 	/*string comando = "create -s cuadrado -i 1.0 2.0 -e 3.0 4.0 -f rojo -b azul";
 	string comando2 = "list -s rectangulo -v verde";

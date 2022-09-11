@@ -13,13 +13,17 @@
 class Compiler
 {
 public:
-	Compiler(Parser* par, Canvas* canv, Toolbar* toolb): parser{par}, canvas{canv}, toolbar{toolb}, lineCP{nullptr} {}
+	Compiler(Parser* par, Canvas* canv, Toolbar* toolb): parser{par}, canvas{canv}, toolbar{toolb}, lineCP{nullptr}
+	{
+		CompilerMapInitializer::initializeLineCommandMap(canvas, toolbar, &lineCommandFactories);
+	}
 
 	void compile(string comando)
 	{
-		lineCP = parser->buildParamsStruct(comando);
-		CompilerMapInitializer::initializeLineCommandMap(canvas, toolbar, &lineCommandFactories, lineCP);
-		lineCommandFactories[lineCP->commandType]()->execute();
+		lineCP = parser->parse(comando);
+		LineCommand *lineCommand = lineCommandFactories[lineCP->commandType](lineCP);
+		lineCommand->execute();
+		//delete lineCommand;
 	}
 
 private:
@@ -27,7 +31,7 @@ private:
 	Canvas *canvas;
 	Toolbar *toolbar;
 	LineCommandParse* lineCP;
-	map<string,function<LineCommand*()>> lineCommandFactories;
+	map<string,function<LineCommand*(LineCommandParse*)>> lineCommandFactories;
 };
 
 

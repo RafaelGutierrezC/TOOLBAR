@@ -9,7 +9,8 @@ using namespace std;
 class Shape
 {
 public:
-	virtual string pintar() = 0;
+	virtual string getType() = 0;
+	virtual Point* getInitPoint() = 0;
 };
 
 
@@ -19,7 +20,8 @@ public:
 	Rectangulo(Point iniciop, Point finalp, Color *colorFrente, Color *colorFondo):
 		iniciop(iniciop),finalp(finalp),colorFrente(colorFrente),colorFondo(colorFondo) {}
 
-	string pintar() { return "Rectangulo"; }
+	string getType() { return "rectangulo"; }
+	Point* getInitPoint() { return &iniciop; }
 
 private:
 	Point iniciop;
@@ -35,7 +37,8 @@ public:
 	Circulo(Point iniciop, Point finalp, Color *colorFrente, Color *colorFondo):
 		iniciop(iniciop), finalp(finalp), colorFrente(colorFrente), colorFondo(colorFondo) {}
 
-	string pintar() { return "Circulo"; }
+	string getType() { return "circulo"; }
+	Point* getInitPoint() { return &iniciop; }
 
 private:
 	Point iniciop;
@@ -51,7 +54,8 @@ public:
 	Cuadrado(Point iniciop, Point finalp, Color *colorFrente, Color *colorFondo):
 		iniciop(iniciop), finalp(finalp), colorFrente(colorFrente), colorFondo(colorFondo) {}
 
-	string pintar() { return "Cuadrado"; }
+	string getType() { return "cuadrado"; }
+	Point* getInitPoint() { return &iniciop; }
 
 private:
 	Point iniciop;

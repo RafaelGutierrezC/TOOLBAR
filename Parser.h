@@ -3,107 +3,91 @@
 
 #include "CLI11.hpp"
 #include <iostream>
-#include <sstream>
 #include "Point.h"
+#include "LineCommandParse.h"
+#include <string>
 using namespace std;
-
-
-struct LineCommandParse
-{
-	string commandType;
-	string shapeType;
-	Point *iniciop;
-	Point *finalp;
-	string colorFrente;
-	string colorFondo;
-	string id;
-	string file;
-};
 
 
 class Parser
 {
 public:
-	Parser(CLI::App *capp): cliapp{capp} {}
-
-	LineCommandParse* buildParamsStruct(string comando)
+	Parser(CLI::App *capp, LineCommandParse* lcp): cliapp{capp}, lineCP{lcp}
 	{
-		LineCommandParse *lineCP = new LineCommandParse();
-		string tipoComando;
-		stringstream ss{comando};
-		ss >> tipoComando;
+		resetLineCP();
+		setupCreate(cliapp,lineCP);
+		setupList(cliapp,lineCP);
+	}
 
-		lineCP->commandType = tipoComando;
-		lineCP->shapeType = "all";
-
-
-		auto *shapeOption = cliapp->add_option("-s", lineCP->shapeType, "Shape type");
-		pair<double,double> ip = make_pair(0.0,0.0);
-		pair<double,double> ep = make_pair(0.0,0.0);
-
-		auto *iniciopOption = cliapp->add_option("-i", ip, "X Initial Point");
-		auto *finalpOption = cliapp->add_option("-e", ep, "X Final Point");
-		auto *colorFrenteOption = cliapp->add_option("-f", lineCP->colorFrente, "Front Color");
-		auto *colorFondoOption = cliapp->add_option("-b", lineCP->colorFondo, "Back Color");
-
-
-
-
-		lineCP->iniciop = new Point(ip.first,ip.second);
-		lineCP->finalp = new Point(ep.first,ep.second);
-
-
-		requisiteModifiers.insert(make_pair("create",
-			[=]()
-			{
-				parseCreate(shapeOption,iniciopOption,finalpOption,colorFrenteOption,colorFondoOption);
-			}
-		));
-
-		requisiteModifiers.insert(make_pair("list",
-					[=]()
-					{
-						parseList(shapeOption,iniciopOption);
-					}
-				));
-
-		requisiteModifiers.insert(make_pair("applyForeColor",
-			[=]()
-			{
-				parseApplyForeColor(shapeOption,colorFrenteOption);
-			}
-		));
-
-		requisiteModifiers[tipoComando]();
-		cliapp->parse(comando,true);
+	LineCommandParse* parse(string comando)
+	{
+		try
+		{
+			resetLineCP();
+			cliapp->parse(comando);
+		}
+		catch(exception *e)
+		{
+			cout << "PARSE ERROR" << endl;
+		}
 
 		return lineCP;
 	}
 
 private:
 	CLI::App *cliapp;
-	map<string,function<void()>> requisiteModifiers;
+	LineCommandParse* lineCP;
 
-	void parseCreate(CLI::Option *shapeOption, CLI::Option *iniciopOption, CLI::Option *finalpOption,
-			CLI::Option *colorFrenteOption, CLI::Option *colorFondoOption)
+	void resetLineCP()
 	{
-		shapeOption->required();
-		iniciopOption->required();
-		finalpOption->required();
-		colorFrenteOption->required(false);
-		colorFondoOption->required(false);
+		lineCP->commandType = "NULL";
+		lineCP->shapeType = "NULL";
+		lineCP->iniciop = make_pair(0.0,0.0);
+		lineCP->finalp = make_pair(0.0,0.0);
+		lineCP->colorFrente = "verde";
+		lineCP->colorFondo = "verde";
+		lineCP->id = 0;
+		lineCP->file = "";
 	}
 
-	void parseList(CLI::Option *shapeOption, CLI::Option *iniciopOption)
+	void setupCreate(CLI::App *cli, LineCommandParse *lineCP)
 	{
-		shapeOption->required(false);
-		iniciopOption->required(false);
+		auto *createSub = cli->add_subcommand("create","Create a Shape");
+
+		createSub->add_option("-s", lineCP->shapeType, "Shape type")->required();
+		createSub->add_option("-i", lineCP->iniciop, "X Initial Point")->required();
+		createSub->add_option("-e", lineCP->finalp, "X Final Point")->required();
+		createSub->add_option("-f", lineCP->colorFrente, "Front Color")->required(false);
+		createSub->add_option("-b", lineCP->colorFondo, "Back Color")->required(false);
+
+		createSub->callback(
+			[lineCP]()
+			{
+				lineCP->commandType = "create";
+			}
+		);
 	}
 
-	void parseApplyForeColor(CLI::Option *shapeOption, CLI::Option *colorFrenteOption)
+
+	void setupList(CLI::App *cli, LineCommandParse *lineCP)
 	{
-		shapeOption->required();
-		colorFrenteOption->required();
+		auto *listSub = cli->add_subcommand("list","Create a Shape");
+
+		lineCP->shapeType = "all";
+		listSub->add_option("-s", lineCP->shapeType, "Shape type")->required(false);
+		listSub->add_option("-i", lineCP->iniciop, "X Initial Point")->required(false);
+
+		listSub->callback(
+			[lineCP]()
+			{
+				lineCP->commandType = "list";
+			}
+		);
+	}
+
+	void setupApplyForeColor()
+	{
+
 	}
 };
 
