@@ -24,7 +24,7 @@ public:
 	virtual void applyBackgroundColor(int id, Color *color) = 0;
 	virtual void move(int id, Point *punto) = 0;
 	virtual void remove(int id, Point *punto) = 0;
-	virtual void open(Compiler *compiler, string file) = 0;
+	virtual void open(Compiler *compiler, const string file) = 0;
 	virtual ~Canvas() {}
 };
 
@@ -228,14 +228,18 @@ public:
 		}
 	}
 
-	void open(Compiler *compiler, string file)
+	void open(Compiler *compiler, const string file)
 	{
-		//inputFile(file);
+		ifstream inputFile(file);
+		string line;
+		while(getline(inputFile,line))
+		{
+			compiler->compile(line);
+		}
 	}
 
 private:
 	vector<pair<Shape*,int>> storedShapes;
-	//ifstream inputFile;
 };
 
 

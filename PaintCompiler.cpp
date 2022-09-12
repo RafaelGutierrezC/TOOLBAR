@@ -76,10 +76,10 @@ void PaintCompiler::initializeLineCommandMap()
 		}
 	));
 
-	/*lineCommandFactories.insert(make_pair("open",
+	lineCommandFactories.insert(make_pair("open",
 		[=](LineCommandParse *lineCP)
 		{
 			return buildLineCommand<OpenCommand>(this,canvas,lineCP->file);
 		}
-	));*/
+	));
 }
