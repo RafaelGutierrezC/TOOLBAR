@@ -4,7 +4,9 @@
 #include "Shape.h"
 #include "Canvas.h"
 #include "Toolbar.h"
+#include "Parser.h"
 #include "Compiler.h"
+#include "PaintCompiler.h"
 #include "LineCommandParse.h"
 #include "CLI11.hpp" // TEST
 using namespace std;
@@ -38,11 +40,18 @@ int main()
 	ColorFactory *azulFactory = new AzulFactory();
 	toolbar->addColorFactory("azul", azulFactory);
 
-	Compiler compiler(parser,canvas,toolbar);
-	compiler.compile("create -s cuadrado -p 1.0 2.0 -e 3.0 4.0 -r rojo -b azul");
-	compiler.compile("create -s cuadrado -p 4.0 2.0 -e 3.0 2.0");
-	compiler.compile("create -s circulo -p 1.0 2.0 -e 6.0 1.0 -b verde");
-	compiler.compile("list");
+	Compiler *compiler = new PaintCompiler(parser,canvas,toolbar);
+	compiler->compile("create -s cuadrado -p 1.0 2.0 -e 3.0 4.0 -r rojo -b azul");
+	compiler->compile("create -s cuadrado -p 4.0 2.0 -e 3.0 2.0");
+	compiler->compile("create -s circulo -p 1.0 2.0 -e 6.0 1.0 -b verde");
+	cout << "LIST 01" << endl;
+	compiler->compile("list");
+	compiler->compile("applyForeColor -i 2 -r azul");
+	compiler->compile("applyBackgroundColor -i 2 -b azul");
+	compiler->compile("move -i 2 -p 7.4 4.7");
+	compiler->compile("remove -p 1.0 2.0");
+	cout << "LIST 02" << endl;
+	compiler->compile("list");
 	//canvas->pintarTodo();
 
 	/*string comando = "create -s cuadrado -i 1.0 2.0 -e 3.0 4.0 -f rojo -b azul";

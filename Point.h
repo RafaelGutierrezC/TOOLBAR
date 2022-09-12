@@ -7,6 +7,7 @@ public:
 	Point(double x, double y): x(x), y(y) {}
 	Point(Point& punto): x{punto.x}, y{punto.y} {}
 	bool operator ==(Point& punto) { return (x == punto.x && y == punto.y); }
+	bool operator !=(Point& punto) { return (x != punto.x || y != punto.y); }
 
 	double getX() { return x; }
 	double getY() { return y; }

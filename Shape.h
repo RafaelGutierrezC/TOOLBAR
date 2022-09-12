@@ -13,9 +13,13 @@ static int idCount = 0;
 class Shape
 {
 public:
+	virtual ~Shape() {}
 	virtual string getShapeDescription() = 0;
 	virtual string getType() = 0;
 	virtual Point* getInitPoint() = 0;
+	virtual void setInitPoint(Point *punto) = 0;
+	virtual void setForeColor(Color *color) = 0;
+	virtual void setBackgroundColor(Color *color) = 0;
 	virtual int getId() = 0;
 
 };
@@ -25,7 +29,13 @@ class Rectangulo: public Shape
 {
 public:
 	Rectangulo(Point iniciop, Point finalp, Color *colorFrente, Color *colorFondo):
-		id{++idCount}, iniciop(iniciop),finalp(finalp),colorFrente(colorFrente),colorFondo(colorFondo){}
+		id{++idCount}, iniciop(iniciop),finalp(finalp),colorFrente(colorFrente),colorFondo(colorFondo) {}
+
+	virtual ~Rectangulo()
+	{
+		delete colorFrente;
+		delete colorFondo;
+	}
 
 	string getShapeDescription()
 	{
@@ -42,6 +52,23 @@ public:
 	string getType() { return "rectangulo"; }
 	Point* getInitPoint() { return &iniciop; }
 	int getId() { return id; }
+	void setInitPoint(Point *punto)
+	{
+		iniciop.setX(punto->getX());
+		iniciop.setY(punto->getY());
+	}
+
+	void setForeColor(Color *color)
+	{
+		delete colorFrente;
+		colorFrente = color;
+	}
+
+	void setBackgroundColor(Color *color)
+	{
+		delete colorFondo;
+		colorFondo = color;
+	}
 
 private:
 	int id;
@@ -70,9 +97,32 @@ public:
 		return description.str();
 	}
 
+	virtual ~Circulo()
+	{
+		delete colorFrente;
+		delete colorFondo;
+	}
+
 	string getType() { return "circulo"; }
 	Point* getInitPoint() { return &iniciop; }
-	int getId() { return id;}
+	int getId() { return id; }
+	void setInitPoint(Point *punto)
+	{
+		iniciop.setX(punto->getX());
+		iniciop.setY(punto->getY());
+	}
+
+	void setForeColor(Color *color)
+	{
+		delete colorFrente;
+		colorFrente = color;
+	}
+
+	void setBackgroundColor(Color *color)
+	{
+		delete colorFondo;
+		colorFondo = color;
+	}
 
 private:
 	int id;
@@ -89,6 +139,12 @@ public:
 	Cuadrado(Point iniciop, Point finalp, Color *colorFrente, Color *colorFondo):
 		id{++idCount}, iniciop(iniciop), finalp(finalp), colorFrente(colorFrente), colorFondo(colorFondo) {}
 
+	virtual ~Cuadrado()
+	{
+		delete colorFrente;
+		delete colorFondo;
+	}
+
 	string getShapeDescription()
 	{
 		stringstream description;
@@ -103,7 +159,27 @@ public:
 
 	string getType() { return "cuadrado"; }
 	Point* getInitPoint() { return &iniciop; }
-	int getId() { return id;}
+	int getId() { return id; }
+	void setInitPoint(Point *punto)
+	{
+		double x = punto->getX() - iniciop.getX();
+		double y = punto->getY() - iniciop.getY();
+		iniciop.setX(punto->getX());
+		iniciop.setY(punto->getY());
+		finalp.setX(finalp.getX()+x);
+		finalp.setY(finalp.getY()+y);
+	}
+	void setForeColor(Color *color)
+	{
+		delete colorFrente;
+		colorFrente = color;
+	}
+
+	void setBackgroundColor(Color *color)
+	{
+		delete colorFondo;
+		colorFondo = color;
+	}
 
 private:
 	int id;

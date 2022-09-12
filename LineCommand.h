@@ -5,8 +5,7 @@
 #include <iostream>
 #include "Point.h"
 #include "Color.h"
-#include "Canvas.h"
-#include "Toolbar.h"
+#include "Compiler.h"
 using namespace std;
 
 
@@ -28,7 +27,7 @@ public:
 class CreateCommand: public LineCommand
 {
 public:
-	CreateCommand(Canvas* canv, Toolbar* toolb, string shapeType, Point *inicioPunto, Point *finalPunto, string colorFrente, string colorFondo):
+	CreateCommand(Canvas *canv, Toolbar *toolb, string shapeType, Point *inicioPunto, Point *finalPunto, string colorFrente, string colorFondo):
 		canvas{canv}, toolbar{toolb}, iniciop{inicioPunto}, finalp{finalPunto}
 	{
 		shapeTyp = shapeType;
@@ -68,7 +67,7 @@ private:
 class ListCommand: public LineCommand
 {
 public:
-	ListCommand(Canvas *canv,Toolbar *toolb,string shapeType,Point *inicioPunto): canvas{canv}, toolbar{toolb}, iniciop{inicioPunto}
+	ListCommand(Canvas *canv, string shapeType, Point *inicioPunto): canvas{canv}, iniciop{inicioPunto}
 	{
 		shapeTyp = shapeType;
 	}
@@ -83,58 +82,11 @@ public:
 
 	void execute()
 	{
-		vector<pair<Shape*,int>> *allShapes = canvas->getAllShapes();
-
-		if(shapeTyp == "NULL")
-		{
-			if(iniciop->getX() == 0.0 || iniciop->getY() == 0.0)
-			{
-				for(auto iter = allShapes->begin(); iter != allShapes->end(); iter++)
-				{
-					(*iter).second = 1;
-				}
-			}
-			else
-			{
-				for(auto iter = allShapes->begin(); iter != allShapes->end(); iter++)
-				{
-					if(iniciop->getX() ==  (*iter).first->getInitPoint()->getX() && iniciop->getY() ==  (*iter).first->getInitPoint()->getY())
-					{
-						(*iter).second = 1;
-					}
-				}
-			}
-		}
-		else
-		{
-			if(iniciop->getX() == 0.0 || iniciop->getY() == 0.0)
-			{
-				for(auto iter = allShapes->begin(); iter != allShapes->end(); iter++)
-				{
-					if(shapeTyp == (*iter).first->getType())
-					{
-						(*iter).second = 1;
-					}
-				}
-			}
-			else
-			{
-				for(auto iter = allShapes->begin(); iter != allShapes->end(); iter++)
-				{
-					if(shapeTyp == (*iter).first->getType() && iniciop->getX() ==  (*iter).first->getInitPoint()->getX() && iniciop->getY() ==  (*iter).first->getInitPoint()->getY())
-					{
-						(*iter).second = 1;
-					}
-				}
-			}
-		}
-
-		canvas->list();
+		canvas->list(shapeTyp,iniciop);
 	}
 
 private:
 	Canvas *canvas;
-	Toolbar *toolbar;
 	string shapeTyp;
 	Point *iniciop;
 };
@@ -143,8 +95,8 @@ private:
 class SelectCommand: public LineCommand
 {
 public:
-	SelectCommand(Canvas* canv, Toolbar* toolb, int sid):
-		canvas{canv}, toolbar{toolb}, id{sid} { }
+	SelectCommand(Canvas *canv, int sid):
+		canvas{canv}, id{sid} { }
 
 	virtual ~SelectCommand()
 	{
@@ -160,7 +112,6 @@ public:
 
 private:
 	Canvas *canvas;
-	Toolbar *toolbar;
 	int id;
 };
 
@@ -168,8 +119,8 @@ private:
 class SelectAllCommand: public LineCommand
 {
 public:
-	SelectAllCommand(Canvas* canv, Toolbar* toolb):
-		canvas{canv}, toolbar{toolb} { }
+	SelectAllCommand(Canvas *canv):
+		canvas{canv} { }
 
 	virtual ~SelectAllCommand()
 	{
@@ -185,15 +136,14 @@ public:
 
 private:
 	Canvas *canvas;
-	Toolbar *toolbar;
 };
 
 
 class UnSelectCommand: public LineCommand
 {
 public:
-	UnSelectCommand(Canvas* canv, Toolbar* toolb, int sid):
-		canvas{canv}, toolbar{toolb}, id{sid} { }
+	UnSelectCommand(Canvas *canv, int sid):
+		canvas{canv}, id{sid} { }
 
 	virtual ~UnSelectCommand()
 	{
@@ -209,7 +159,6 @@ public:
 
 private:
 	Canvas *canvas;
-	Toolbar *toolbar;
 	int id;
 };
 
@@ -217,8 +166,8 @@ private:
 class UnSelectAllCommand: public LineCommand
 {
 public:
-	UnSelectAllCommand(Canvas* canv, Toolbar* toolb):
-		canvas{canv}, toolbar{toolb} { }
+	UnSelectAllCommand(Canvas *canv):
+		canvas{canv} { }
 
 	virtual ~UnSelectAllCommand()
 	{
@@ -234,8 +183,134 @@ public:
 
 private:
 	Canvas *canvas;
-	Toolbar *toolbar;
 };
 
+
+class ApplyForeColorCommand: public LineCommand
+{
+public:
+	ApplyForeColorCommand(Canvas *canv, Toolbar *toolb, int sid, string colorFrente):
+		canvas{canv}, toolbar{toolb}, id{sid}
+	{
+		colorFren = colorFrente;
+	}
+
+	virtual ~ApplyForeColorCommand()
+	{
+		/*delete canvas;
+		delete toolbar;*/
+	}
+
+
+	void execute()
+	{
+		canvas->applyForeColor(id,toolbar->getColor(colorFren));
+	}
+
+private:
+	Canvas *canvas;
+	Toolbar *toolbar;
+	int id;
+	string colorFren;
+};
+
+
+class ApplyBackgroundColorCommand: public LineCommand
+{
+public:
+	ApplyBackgroundColorCommand(Canvas *canv, Toolbar *toolb, int sid, string colorFondo):
+		canvas{canv}, toolbar{toolb}, id{sid}
+	{
+		colorFon = colorFondo;
+	}
+
+	virtual ~ApplyBackgroundColorCommand()
+	{
+		/*delete canvas;
+		delete toolbar;*/
+	}
+
+
+	void execute()
+	{
+		canvas->applyBackgroundColor(id,toolbar->getColor(colorFon));
+	}
+
+private:
+	Canvas *canvas;
+	Toolbar *toolbar;
+	int id;
+	string colorFon;
+};
+
+
+class MoveCommand: public LineCommand
+{
+public:
+	MoveCommand(Canvas *canv, int sid, Point *punto):
+		canvas{canv}, id{sid}, iniciop{punto} {}
+
+	virtual ~MoveCommand() {}
+
+
+	void execute()
+	{
+		canvas->move(id,iniciop);
+	}
+
+private:
+	Canvas *canvas;
+	int id;
+	Point *iniciop;
+};
+
+
+class RemoveCommand: public LineCommand
+{
+public:
+	RemoveCommand(Canvas *canv, int sid, Point *punto):
+		canvas{canv}, id{sid}, iniciop{punto} {}
+
+	virtual ~RemoveCommand() {}
+
+
+	void execute()
+	{
+		canvas->remove(id,iniciop);
+	}
+
+private:
+	Canvas *canvas;
+	int id;
+	Point *iniciop;
+};
+
+
+class OpenCommand: public LineCommand
+{
+public:
+	OpenCommand(Compiler *comp, Canvas *canv, string fichero):
+		compiler{comp}, canvas{canv}
+	{
+		file = fichero;
+	}
+
+	virtual ~OpenCommand()
+	{
+		/*delete canvas;
+		delete toolbar;*/
+	}
+
+
+	void execute()
+	{
+		canvas->open(compiler,file);
+	}
+
+private:
+	Compiler *compiler;
+	Canvas *canvas;
+	string file;
+};
 
 #endif /* LINE_COMMAND_H_ */

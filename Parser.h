@@ -15,8 +15,17 @@ public:
 	Parser(CLI::App *capp, LineCommandParse* lcp): cliapp{capp}, lineCP{lcp}
 	{
 		resetLineCP();
+		capp->require_subcommand(1,1);
 		setupCreate(cliapp,lineCP);
 		setupList(cliapp,lineCP);
+		setupSelect(cliapp,lineCP);
+		setupSelectAll(cliapp,lineCP);
+		setupUnselect(cliapp,lineCP);
+		setupUnselectAll(cliapp,lineCP);
+		setupApplyForeColor(cliapp,lineCP);
+		setupApplyBackgroundColor(cliapp,lineCP);
+		setupMove(cliapp,lineCP);
+		setupRemove(cliapp,lineCP);
 	}
 
 	LineCommandParse* parse(string comando)
@@ -110,7 +119,7 @@ private:
 		);
 	}
 
-	void setupUnSelect(CLI::App *cli, LineCommandParse *lineCP)
+	void setupUnselect(CLI::App *cli, LineCommandParse *lineCP)
 	{
 		auto *sub = cli->add_subcommand("unselect","Unselect a Shape");
 
@@ -124,7 +133,7 @@ private:
 		);
 	}
 
-	void setupUnSelectAll(CLI::App *cli, LineCommandParse *lineCP)
+	void setupUnselectAll(CLI::App *cli, LineCommandParse *lineCP)
 	{
 		auto *sub = cli->add_subcommand("unselectAll","Unselect all Shapes");
 
@@ -132,6 +141,81 @@ private:
 			[lineCP]()
 			{
 				lineCP->commandType = "unselectAll";
+			}
+		);
+	}
+
+	void setupApplyForeColor(CLI::App *cli, LineCommandParse *lineCP)
+	{
+		auto *sub = cli->add_subcommand("applyForeColor","Apply foreground color to a Shape");
+
+		sub->add_option("-i", lineCP->id, "Shape ID")->required();
+		sub->add_option("-r", lineCP->colorFrente, "Front Color")->required();
+
+		sub->callback(
+			[lineCP]()
+			{
+				lineCP->commandType = "applyForeColor";
+			}
+		);
+	}
+
+	void setupApplyBackgroundColor(CLI::App *cli, LineCommandParse *lineCP)
+	{
+		auto *sub = cli->add_subcommand("applyBackgroundColor","Apply background color to a Shape");
+
+		sub->add_option("-i", lineCP->id, "Shape ID")->required();
+		sub->add_option("-b", lineCP->colorFondo, "Background Color")->required();
+
+		sub->callback(
+			[lineCP]()
+			{
+				lineCP->commandType = "applyBackgroundColor";
+			}
+		);
+	}
+
+	void setupMove(CLI::App *cli, LineCommandParse *lineCP)
+	{
+		auto *sub = cli->add_subcommand("move","Move a Shape");
+
+		sub->add_option("-i", lineCP->id, "Shape ID")->required();
+		sub->add_option("-p", lineCP->iniciop, "Initial Point")->required();
+
+		sub->callback(
+			[lineCP]()
+			{
+				lineCP->commandType = "move";
+			}
+		);
+	}
+
+	void setupRemove(CLI::App *cli, LineCommandParse *lineCP)
+	{
+		auto *sub = cli->add_subcommand("remove","Remove a(some) Shape(s)");
+		sub->require_option(1,2);
+
+		sub->add_option("-i", lineCP->id, "Shape ID")->required(false);
+		sub->add_option("-p", lineCP->iniciop, "Initial Point")->required(false);
+
+		sub->callback(
+			[lineCP]()
+			{
+				lineCP->commandType = "remove";
+			}
+		);
+	}
+
+	void setupOpen(CLI::App *cli, LineCommandParse *lineCP)
+	{
+		auto *sub = cli->add_subcommand("open","Open a file");
+
+		sub->add_option("-f", lineCP->file, "File")->required();
+
+		sub->callback(
+			[lineCP]()
+			{
+				lineCP->commandType = "open";
 			}
 		);
 	}
