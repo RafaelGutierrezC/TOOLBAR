@@ -1,0 +1,9 @@
+create -s cuadrado -p 1.0 2.0 -e 3.0 4.0 -r rojo -b azul
+create -s cuadrado -p 4.0 2.0 -e 3.0 2.0
+create -s circulo -p 1.0 2.0 -e 6.0 1.0 -b verde
+list
+applyForeColor -i 2 -r azul
+applyBackgroundColor -i 2 -b azul
+move -i 2 -p 7.4 4.7
+remove -p 1.0 2.0
+list
