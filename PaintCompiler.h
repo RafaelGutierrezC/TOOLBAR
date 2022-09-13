@@ -10,13 +10,14 @@
 #include "Parser.h"
 #include "LineCommand.h"
 #include "Application.h"
+#include "PubSub.h"
 
 
 class PaintCompiler: public Compiler
 {
 public:
-	PaintCompiler(Application *app, Parser *par, Canvas *canv, Toolbar *toolb):
-		application{app}, parser{par}, canvas{canv}, toolbar{toolb}, lineCP{nullptr}
+	PaintCompiler(PubSub *pubs, Application *app, Parser *par, Canvas *canv, Toolbar *toolb):
+		pusu{pubs}, application{app}, parser{par}, canvas{canv}, toolbar{toolb}, lineCP{nullptr}
 	{
 		initializeLineCommandMap();
 	}
@@ -31,10 +32,15 @@ public:
 		lineCP = parser->parse(comando);
 		LineCommand *lineCommand(lineCommandFactories[lineCP->commandType](lineCP));
 		lineCommand->execute();
+		if(lineCommand->isSerializable())
+		{
+			pusu->emit("channel",comando);
+		}
 		delete lineCommand;
 	}
 
 private:
+	PubSub *pusu;
 	Application *application;
 	Parser *parser;
 	Canvas *canvas;

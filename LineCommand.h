@@ -21,6 +21,7 @@ class LineCommand
 {
 public:
 	virtual void execute() = 0;
+	virtual bool isSerializable() = 0;
 	virtual ~LineCommand() {}
 };
 
@@ -47,6 +48,11 @@ public:
 	{
 		Shape *shape = toolbar->getShape(shapeTyp, iniciop, finalp, toolbar->getColor(colorFren), toolbar->getColor(colorFon));
 		canvas->create(shape);
+	}
+
+	bool isSerializable()
+	{
+		return true;
 	}
 
 private:
@@ -78,6 +84,11 @@ public:
 		canvas->list(shapeTyp,iniciop);
 	}
 
+	bool isSerializable()
+	{
+		return false;
+	}
+
 private:
 	Canvas *canvas;
 	string shapeTyp;
@@ -96,6 +107,11 @@ public:
 	void execute()
 	{
 		canvas->select(id);
+	}
+
+	bool isSerializable()
+	{
+		return true;
 	}
 
 private:
@@ -117,6 +133,11 @@ public:
 		canvas->selectAll();
 	}
 
+	bool isSerializable()
+	{
+		return true;
+	}
+
 private:
 	Canvas *canvas;
 };
@@ -133,6 +154,11 @@ public:
 	void execute()
 	{
 		canvas->unSelect(id);
+	}
+
+	bool isSerializable()
+	{
+		return true;
 	}
 
 private:
@@ -154,6 +180,11 @@ public:
 		canvas->unSelectAll();
 	}
 
+	bool isSerializable()
+	{
+		return true;
+	}
+
 private:
 	Canvas *canvas;
 };
@@ -173,6 +204,11 @@ public:
 	void execute()
 	{
 		canvas->applyForeColor(id,toolbar->getColor(colorFren));
+	}
+
+	bool isSerializable()
+	{
+		return true;
 	}
 
 private:
@@ -199,6 +235,11 @@ public:
 		canvas->applyBackgroundColor(id,toolbar->getColor(colorFon));
 	}
 
+	bool isSerializable()
+	{
+		return true;
+	}
+
 private:
 	Canvas *canvas;
 	Toolbar *toolbar;
@@ -221,6 +262,11 @@ public:
 	void execute()
 	{
 		canvas->move(id,iniciop);
+	}
+
+	bool isSerializable()
+	{
+		return true;
 	}
 
 private:
@@ -246,6 +292,11 @@ public:
 		canvas->remove(id,iniciop);
 	}
 
+	bool isSerializable()
+	{
+		return true;
+	}
+
 private:
 	Canvas *canvas;
 	int id;
@@ -269,6 +320,11 @@ public:
 		canvas->open(compiler,file);
 	}
 
+	bool isSerializable()
+	{
+		return false;
+	}
+
 private:
 	Compiler *compiler;
 	Canvas *canvas;
@@ -286,6 +342,11 @@ public:
 	void execute()
 	{
 		application->shutdown();
+	}
+
+	bool isSerializable()
+	{
+		return false;
 	}
 
 private:

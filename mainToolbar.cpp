@@ -1,6 +1,4 @@
-#include "Application.h"
 #include "PaintApplication.h"
-#include "LineCommand.h"	// TEST
 
 
 int main()
