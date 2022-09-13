@@ -1,21 +1,12 @@
-#include <iostream>
-#include "Point.h"
-#include "Color.h"
-#include "Shape.h"
-#include "Canvas.h"
-#include "Toolbar.h"
-#include "Parser.h"
-#include "CLI11Parser.h"
-#include "Compiler.h"
-#include "PaintCompiler.h"
-#include "LineCommandParse.h"
-using namespace std;
+#include "Application.h"
+#include "PaintApplication.h"
+#include "LineCommand.h"	// TEST
 
 
 int main()
 {
 
-	CLI::App cliapp{"Paint App"};
+	/*CLI::App cliapp{"Paint App"};
 	LineCommandParse *lineCP = new LineCommandParse();
 	Parser *parser = new CLI11Parser(&cliapp,lineCP);
 
@@ -40,7 +31,7 @@ int main()
 	ColorFactory *azulFactory = new AzulFactory();
 	toolbar->addColorFactory("azul", azulFactory);
 
-	Compiler *compiler = new PaintCompiler(parser,canvas,toolbar);
+	Compiler *compiler = new PaintCompiler(parser,canvas,toolbar);*/
 	/*compiler->compile("create -s cuadrado -p 1.0 2.0 -e 3.0 4.0 -r rojo -b azul");
 	compiler->compile("create -s cuadrado -p 4.0 2.0 -e 3.0 2.0");
 	compiler->compile("create -s circulo -p 1.0 2.0 -e 6.0 1.0 -b verde");
@@ -52,7 +43,17 @@ int main()
 	compiler->compile("remove -p 1.0 2.0");
 	cout << "LIST 02" << endl;
 	compiler->compile("list");*/
-	compiler->compile("open -f fichero.txt");
+	//compiler->compile("open -f fichero.txt");
+
+	Application *app = new PaintApplication();
+	app->runApp();
+	delete app;
+
+	/*LineCommand *lineCommand = new CreateCommand(new PaintCanvas(),new PaintToolbar(),"cuadrado",new Point(0.0,0.0),new Point(0.0,0.0),"rojo","rojo");
+	delete lineCommand;
+
+	lineCommand = new ListCommand(new PaintCanvas(),"cuadrado",new Point(0.0,0.0));
+	delete lineCommand;*/
 
 	return 0;
 }

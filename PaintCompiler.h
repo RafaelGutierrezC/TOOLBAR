@@ -3,30 +3,39 @@
 
 #include <map>
 #include <functional>
+#include <memory>
 #include "Compiler.h"
 #include "Canvas.h"
 #include "Toolbar.h"
 #include "Parser.h"
 #include "LineCommand.h"
+#include "Application.h"
 
 
 class PaintCompiler: public Compiler
 {
 public:
-	PaintCompiler(Parser* par, Canvas* canv, Toolbar* toolb): parser{par}, canvas{canv}, toolbar{toolb}, lineCP{nullptr}
+	PaintCompiler(Application *app, Parser *par, Canvas *canv, Toolbar *toolb):
+		application{app}, parser{par}, canvas{canv}, toolbar{toolb}, lineCP{nullptr}
 	{
 		initializeLineCommandMap();
+	}
+
+	virtual ~PaintCompiler()
+	{
+		delete lineCP;
 	}
 
 	void compile(string comando)
 	{
 		lineCP = parser->parse(comando);
-		LineCommand *lineCommand = lineCommandFactories[lineCP->commandType](lineCP);
+		LineCommand *lineCommand(lineCommandFactories[lineCP->commandType](lineCP));
 		lineCommand->execute();
-		//delete lineCommand;
+		delete lineCommand;
 	}
 
 private:
+	Application *application;
 	Parser *parser;
 	Canvas *canvas;
 	Toolbar *toolbar;

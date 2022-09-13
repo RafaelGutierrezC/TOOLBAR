@@ -13,7 +13,6 @@ static int idCount = 0;
 class Shape
 {
 public:
-	virtual ~Shape() {}
 	virtual string getShapeDescription() = 0;
 	virtual string getType() = 0;
 	virtual Point* getInitPoint() = 0;
@@ -21,6 +20,7 @@ public:
 	virtual void setForeColor(Color *color) = 0;
 	virtual void setBackgroundColor(Color *color) = 0;
 	virtual int getId() = 0;
+	virtual ~Shape() {}
 
 };
 

@@ -8,6 +8,7 @@ class Compiler
 {
 public:
 	virtual void compile(string comando) = 0;
+	virtual ~Compiler() {}
 };
 
 

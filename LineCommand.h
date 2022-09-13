@@ -6,6 +6,7 @@
 #include "Point.h"
 #include "Color.h"
 #include "Compiler.h"
+#include "Application.h"
 using namespace std;
 
 
@@ -37,13 +38,8 @@ public:
 
 	virtual ~CreateCommand()
 	{
-		/*delete canvas;
-		delete toolbar;
-		delete shapeTyp;
 		delete iniciop;
 		delete finalp;
-		delete colorFren;
-		delete colorFon;*/
 	}
 
 
@@ -74,10 +70,7 @@ public:
 
 	virtual ~ListCommand()
 	{
-		/*delete canvas;
-		delete toolbar;
-		delete shapeTyp;
-		delete iniciop;*/
+		delete iniciop;
 	}
 
 	void execute()
@@ -98,12 +91,7 @@ public:
 	SelectCommand(Canvas *canv, int sid):
 		canvas{canv}, id{sid} { }
 
-	virtual ~SelectCommand()
-	{
-		/*delete canvas;
-		delete toolbar;*/
-	}
-
+	virtual ~SelectCommand() {}
 
 	void execute()
 	{
@@ -122,12 +110,7 @@ public:
 	SelectAllCommand(Canvas *canv):
 		canvas{canv} { }
 
-	virtual ~SelectAllCommand()
-	{
-		/*delete canvas;
-		delete toolbar;*/
-	}
-
+	virtual ~SelectAllCommand() {}
 
 	void execute()
 	{
@@ -145,12 +128,7 @@ public:
 	UnSelectCommand(Canvas *canv, int sid):
 		canvas{canv}, id{sid} { }
 
-	virtual ~UnSelectCommand()
-	{
-		/*delete canvas;
-		delete toolbar;*/
-	}
-
+	virtual ~UnSelectCommand() {}
 
 	void execute()
 	{
@@ -167,14 +145,9 @@ class UnSelectAllCommand: public LineCommand
 {
 public:
 	UnSelectAllCommand(Canvas *canv):
-		canvas{canv} { }
+		canvas{canv} {}
 
-	virtual ~UnSelectAllCommand()
-	{
-		/*delete canvas;
-		delete toolbar;*/
-	}
-
+	virtual ~UnSelectAllCommand() {}
 
 	void execute()
 	{
@@ -195,12 +168,7 @@ public:
 		colorFren = colorFrente;
 	}
 
-	virtual ~ApplyForeColorCommand()
-	{
-		/*delete canvas;
-		delete toolbar;*/
-	}
-
+	virtual ~ApplyForeColorCommand() {}
 
 	void execute()
 	{
@@ -224,12 +192,7 @@ public:
 		colorFon = colorFondo;
 	}
 
-	virtual ~ApplyBackgroundColorCommand()
-	{
-		/*delete canvas;
-		delete toolbar;*/
-	}
-
+	virtual ~ApplyBackgroundColorCommand() {}
 
 	void execute()
 	{
@@ -250,8 +213,10 @@ public:
 	MoveCommand(Canvas *canv, int sid, Point *punto):
 		canvas{canv}, id{sid}, iniciop{punto} {}
 
-	virtual ~MoveCommand() {}
-
+	virtual ~MoveCommand()
+	{
+		delete iniciop;
+	}
 
 	void execute()
 	{
@@ -271,8 +236,10 @@ public:
 	RemoveCommand(Canvas *canv, int sid, Point *punto):
 		canvas{canv}, id{sid}, iniciop{punto} {}
 
-	virtual ~RemoveCommand() {}
-
+	virtual ~RemoveCommand()
+	{
+		delete iniciop;
+	}
 
 	void execute()
 	{
@@ -295,12 +262,7 @@ public:
 		file = fichero;
 	}
 
-	virtual ~OpenCommand()
-	{
-		/*delete canvas;
-		delete toolbar;*/
-	}
-
+	virtual ~OpenCommand() {}
 
 	void execute()
 	{
@@ -312,5 +274,23 @@ private:
 	Canvas *canvas;
 	string file;
 };
+
+
+class ExitCommand: public LineCommand
+{
+public:
+	ExitCommand(Application *app): application{app} {}
+
+	virtual ~ExitCommand() {}
+
+	void execute()
+	{
+		application->shutdown();
+	}
+
+private:
+	Application *application;
+};
+
 
 #endif /* LINE_COMMAND_H_ */

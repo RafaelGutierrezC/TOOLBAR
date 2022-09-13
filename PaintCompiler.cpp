@@ -82,4 +82,11 @@ void PaintCompiler::initializeLineCommandMap()
 			return buildLineCommand<OpenCommand>(this,canvas,lineCP->file);
 		}
 	));
+
+	lineCommandFactories.insert(make_pair("exit",
+		[=](LineCommandParse *lineCP)
+		{
+			return buildLineCommand<ExitCommand>(application);
+		}
+	));
 }

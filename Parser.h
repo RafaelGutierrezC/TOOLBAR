@@ -10,6 +10,7 @@ class Parser
 {
 public:
 	virtual LineCommandParse* parse(string comando) = 0;
+	virtual ~Parser() {}
 };
 
 

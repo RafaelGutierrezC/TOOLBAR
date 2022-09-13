@@ -36,11 +36,10 @@ public:
 
 	virtual ~PaintCanvas()
 	{
-		/*for(int i = 0; i < storedShapes.size(); i++)
+		for(size_t i = 0; i < storedShapes.size(); i++)
 		{
-			delete storedShapes[i];
+			delete storedShapes[i].first;
 		}
-		delete storedShapes;*/
 	}
 
 	void create(Shape *shapeType)

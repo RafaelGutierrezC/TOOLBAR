@@ -12,31 +12,20 @@ public:
 	CLI11Parser(CLI::App *capp, LineCommandParse* lcp): cliapp{capp}, lineCP{lcp}
 	{
 		resetLineCP();
-		capp->require_subcommand(1,1);
-		setupCreate(cliapp,lineCP);
-		setupList(cliapp,lineCP);
-		setupSelect(cliapp,lineCP);
-		setupSelectAll(cliapp,lineCP);
-		setupUnselect(cliapp,lineCP);
-		setupUnselectAll(cliapp,lineCP);
-		setupApplyForeColor(cliapp,lineCP);
-		setupApplyBackgroundColor(cliapp,lineCP);
-		setupMove(cliapp,lineCP);
-		setupRemove(cliapp,lineCP);
-		setupOpen(cliapp,lineCP);
+		setupAllCommands();
+	}
+
+	virtual ~CLI11Parser()
+	{
+		delete cliapp;
+		delete lineCP;
 	}
 
 	LineCommandParse* parse(string comando)
 	{
-		try
-		{
-			resetLineCP();
-			cliapp->parse(comando);
-		}
-		catch(exception *e)
-		{
-			cout << "PARSE ERROR" << endl;
-		}
+		resetLineCP();
+		//setupAllCommands();
+		cliapp->parse(comando);
 
 		return lineCP;
 	}
@@ -55,6 +44,23 @@ private:
 		lineCP->colorFondo = "blanco";
 		lineCP->id = 0;
 		lineCP->file = "";
+	}
+
+	void setupAllCommands()
+	{
+		cliapp->require_subcommand(1,1);
+		setupCreate(cliapp,lineCP);
+		setupList(cliapp,lineCP);
+		setupSelect(cliapp,lineCP);
+		setupSelectAll(cliapp,lineCP);
+		setupUnselect(cliapp,lineCP);
+		setupUnselectAll(cliapp,lineCP);
+		setupApplyForeColor(cliapp,lineCP);
+		setupApplyBackgroundColor(cliapp,lineCP);
+		setupMove(cliapp,lineCP);
+		setupRemove(cliapp,lineCP);
+		setupOpen(cliapp,lineCP);
+		setupExit(cliapp,lineCP);
 	}
 
 	void setupCreate(CLI::App *cli, LineCommandParse *lineCP)
@@ -214,6 +220,18 @@ private:
 			[lineCP]()
 			{
 				lineCP->commandType = "open";
+			}
+		);
+	}
+
+	void setupExit(CLI::App *cli, LineCommandParse *lineCP)
+	{
+		auto *sub = cli->add_subcommand("exit","Shutdowns the system");
+
+		sub->callback(
+			[lineCP]()
+			{
+				lineCP->commandType = "exit";
 			}
 		);
 	}

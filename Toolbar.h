@@ -11,12 +11,11 @@ class Toolbar
 public:
 	virtual void addShapeFactory(string key, ShapeFactory* shapeFact) = 0;
 	virtual void addColorFactory(string key, ColorFactory* colorFact) = 0;
-
 	virtual ShapeFactory* getShapeFactory(string key) = 0;
 	virtual ColorFactory* getColorFactory(string key) = 0;
-
 	virtual Shape* getShape(string key, Point *iniciop, Point *finalp, Color *colorFrente, Color *colorFondo) = 0;
 	virtual Color* getColor(string color) = 0;
+	virtual ~Toolbar() {}
 
 };
 
@@ -25,6 +24,19 @@ class PaintToolbar: public Toolbar
 {
 public:
 	PaintToolbar() {}
+
+	virtual ~PaintToolbar()
+	{
+		for(auto iter = shapeFactories.begin(); iter != shapeFactories.end(); iter++)
+		{
+			delete iter->second;
+		}
+
+		for(auto iter = colorFactories.begin(); iter != colorFactories.end(); iter++)
+		{
+			delete iter->second;
+		}
+	}
 
 	void addShapeFactory(string key, ShapeFactory* shapeFact);
 	void addColorFactory(string key, ColorFactory* colorFact);
