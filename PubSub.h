@@ -12,6 +12,7 @@ public:
 	typedef function<void(string)> VoidStringFunction;
 	virtual void emit(string channel, string comando) = 0;
 	virtual VoidStringFunction on(string channel, VoidStringFunction handler) = 0;
+	virtual ~PubSub() {}
 };
 
 

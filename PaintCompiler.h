@@ -32,10 +32,10 @@ public:
 		lineCP = parser->parse(comando);
 		LineCommand *lineCommand(lineCommandFactories[lineCP->commandType](lineCP));
 		lineCommand->execute();
-		if(lineCommand->isSerializable())
+		/*if(lineCommand->isSerializable())
 		{
 			pusu->emit("channel",comando);
-		}
+		}*/
 		delete lineCommand;
 	}
 

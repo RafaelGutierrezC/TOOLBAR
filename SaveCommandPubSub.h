@@ -13,6 +13,7 @@ class SaveCommandPubSub: public PubSub
 {
 public:
 	SaveCommandPubSub() {}
+	virtual ~SaveCommandPubSub() {}
 	void emit(string channel, string comando);
 	VoidStringFunction on(string channel, VoidStringFunction handler);
 

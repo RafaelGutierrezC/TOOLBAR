@@ -53,4 +53,5 @@ public:
 	virtual ~Azul() {}
 };
 
+
 #endif /* COLOR_H_ */

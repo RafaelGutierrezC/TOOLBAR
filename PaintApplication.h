@@ -2,7 +2,7 @@
 #define PAINT_APPLICATION_H_
 
 #include <iostream>
-#include <thread>
+//#include <thread>
 #include "Application.h"
 #include "Point.h"
 #include "Color.h"
@@ -57,6 +57,7 @@ public:
 		delete canvas;
 		delete toolbar;
 		delete compiler;
+		delete pusu;
 	}
 
 	void runApp()
@@ -64,7 +65,7 @@ public:
 		CommandQueue *commandQueue = new CommandQueue();
 		auto closure = pusu->on("channel",[commandQueue](string comando){ commandQueue->pushCommand(comando); } );
 
-		thread hilo(fileCommandWriteThread,closure,commandQueue);
+		//thread hilo(fileCommandWriteThread,closure,commandQueue);
 
 		do
 		{
